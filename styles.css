@@ -1,3 +1,7 @@
+.navbar-brand {
+    margin-left: 10px;
+}
+
 .ribbon-container {
     background-color: #fffec3; /* Background color for the ribbon */
     padding: 15px;
