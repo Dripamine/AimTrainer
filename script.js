@@ -91,15 +91,15 @@ let hits = 0;
 let missed = 0;
 let accuracy = 100;
 let time = 0;
-let interval;
 
 const startBtn = document.querySelector("#start");
 const board = document.querySelector("#board");
 const hitsEl = document.querySelector("#hits");
 const accuracyEl = document.querySelector("#accuracy");
 const timeEl = document.querySelector("#time");
+const welcome = document.querySelector("#welcome");
 
-let timer; // Store the timer reference
+let timer;
 
 // Add a click event listener to the "Start Game" button
 startBtn.addEventListener("click", () => {
@@ -107,7 +107,8 @@ startBtn.addEventListener("click", () => {
 });
 
 function startGame() {
-  startBtn.style.display = "none";
+  startBtn.style.display = "none"; //hides the start game button
+  welcome.style.display = "none";
   // Initialize game variables and start creating random circles
   playing = true;
   hits = 0;
@@ -118,7 +119,7 @@ function startGame() {
   createRandomCircle();
 
   // Set a 30-second timer
-  let remainingTime = 10;
+  let remainingTime = 5;
   updateTimerDisplay(remainingTime);
 
   timer = setInterval(() => {
@@ -135,6 +136,7 @@ function startGame() {
 function updateTimerDisplay(remainingTime) {
   const minutes = Math.floor(remainingTime / 60);
   const seconds = remainingTime % 60;
+  //converts the minutes and seconds into a string.
   const formattedTime = `${minutes.toString().padStart(2, "0")}:${seconds
     .toString()
     .padStart(2, "0")}`;
@@ -150,10 +152,11 @@ function createRandomCircle() {
   const circle = document.createElement("div");
   const size = getRandomNumber(30, 100);
 
+  //method available on DOM elements that returns the position and dimensions of the element relative to the viewport
   const { width, height } = board.getBoundingClientRect();
+  //random locations of the circle
   const x = getRandomNumber(0, width - size);
   const y = getRandomNumber(0, height - size);
-
   circle.classList.add("circle");
   circle.style.width = `${size}px`;
   circle.style.height = `${size}px`;
@@ -218,8 +221,28 @@ function getRandomNumber(min, max) {
   return Math.random() * (max - min) + min;
 }
 
+//function that the game is over
 function gameOver() {
   playing = false;
-  board.innerHTML = "<h1>Game Over</h1>";
-  startBtn.style.display = "block";
+  board.innerHTML = `<h1>Game Over</h1><button class="btn" id="play-again">Play Again</button>`;
+
+  // Add a click event listener to the "Play Again" button
+  const playAgainBtn = document.querySelector("#play-again");
+
+  playAgainBtn.addEventListener("click", () => {
+    resetGame();
+  });
+}
+
+function resetGame() {
+  // Clear the board and the variable values
+  board.innerHTML = "";
+  hits = 0;
+  missed = 0;
+  accuracy = 100;
+  hitsEl.textContent = hits;
+  accuracyEl.textContent = `${accuracy}%`;
+
+  // Start a new game
+  startGame();
 }
