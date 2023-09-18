@@ -9,8 +9,8 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-dark bg-dark">
-        <span class="navbar-brand mb-0 h1">AimTrainer</span>
+    <nav class="navbar navbar-dark bg-dark justify-content-center text-center">
+        <span class="navbar-brand mb-0 h1">Aim Trainer</span>
     </nav>
 
     <div id="gameOverMessage" class="alert alert-info mt-3" style="display: none;"></div>
@@ -41,17 +41,22 @@
             </div>
 
             <div class="col-lg-10 col-md-9">
-                <div class="game-container">
-                    <div class="timer-container">
-                        <h5>Timer: <span id="timer">30</span>s</h5>
+                <div class="screen">
+                    <div class="stats">
+                        <div class="info">
+                            <p class="timer">Time: <span id="time">00:00</span></p>
+                            
+                                <p>Target Hits: <span id="hits">0</span></p>
+                                <p>Accuracy: <span id="accuracy">100%</span></p>
+                            
+                        </div>
                     </div>
-                    <div id="gameGrid" class="game-grid">
-                        <!-- Game grid circles will be inserted here dynamically -->
+                    <div class="board" id="board">
+                        <h1 id="welcome">Aim Trainer</h1>
+                        <button class="btn" id="start">Start Game</button>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
     <script src="script.js"></script>
 </body>
