@@ -89,7 +89,7 @@
 let playing = false;
 let hits = 0;
 let missed = 0;
-let accuracy = 100;
+let accuracy = 0;
 let time = 0;
 
 const startBtn = document.querySelector("#start");
@@ -98,9 +98,10 @@ const hitsEl = document.querySelector("#hits");
 const accuracyEl = document.querySelector("#accuracy");
 const timeEl = document.querySelector("#time");
 const welcome = document.querySelector("#welcome");
-const highscoreTableBody = document.getElementById("highscoreTableBody"); //get the table body element  to add rows
-const highScoresJson = JSON.parse(localStorage.getItem("highScores")) || []; //save the high score
+const highscoreTableBody = document.getElementById("highscoreTableBody");
+const resetBtn = document.querySelector("#reset");
 
+displayHighscore();
 let timer;
 
 // Add a click event listener to the "Start Game" button
@@ -108,17 +109,20 @@ startBtn.addEventListener("click", () => {
   startGame();
 });
 
-function startGame() {
-  //display the high score
-  displayHighscore();
+// Add a click event listener to the "Reset  Score" button
+resetBtn.addEventListener("click", () => {
+  resetScore();
+});
 
+function startGame() {
   startBtn.style.display = "none"; //hides the start game button
   welcome.style.display = "none";
+  resetBtn.style.display = "none";
   // Initialize game variables and start creating random circles
   playing = true;
   hits = 0;
   missed = 0;
-  accuracy = 100;
+  accuracy = 0;
   hitsEl.textContent = hits;
   accuracyEl.textContent = `${accuracy}%`;
   createRandomCircle();
@@ -149,14 +153,17 @@ function updateTimerDisplay(remainingTime) {
 }
 
 function createRandomCircle() {
+  // return when Do nothing
   if (!playing) {
     return;
   }
 
   const circle = document.createElement("div");
-  const size = 100; // Set a static size for the circles
+  const size = getRandomNumber(30, 100);
 
+  //method available on DOM elements that returns the position and dimensions of the element relative to the viewport
   const { width, height } = board.getBoundingClientRect();
+  //random locations of the circle
   const x = getRandomNumber(0, width - size);
   const y = getRandomNumber(0, height - size);
   circle.classList.add("circle");
@@ -167,28 +174,39 @@ function createRandomCircle() {
 
   board.append(circle);
 
+  // Create new circle when the current one disappears
   circle.addEventListener("animationend", () => {
     circle.remove();
     if (playing) {
       createRandomCircle();
+      // If a circle disappears before being clicked, it's counted as a miss
       addMissed();
+      // Recalculate accuracy
       calculateAccuracy();
     }
   });
 
+  // Add event when circle is clicked
   circle.addEventListener("click", (e) => {
     if (e.target.classList.contains("circle")) {
       if (e.target === circle) {
+        // Increase hits by 1
         hits++;
+        // Remove circle
         e.target.remove();
+        // Create a new circle
         if (playing) {
           createRandomCircle();
         }
+        calculateAccuracy();
       }
     } else {
+      // Circle missed when clicked
       missed++;
+      // Recalculate accuracy
       calculateAccuracy();
     }
+    // Show hits on the document
     hitsEl.textContent = hits;
   });
 }
@@ -200,7 +218,7 @@ function addMissed() {
 
 function calculateAccuracy() {
   if (hits + missed === 0) {
-    accuracy = 100; // Prevent division by zero
+    accuracy = 0; // Prevent division by zero
   } else {
     accuracy = (hits / (hits + missed)) * 100;
   }
@@ -219,18 +237,26 @@ function gameOver() {
 
   timeEl.textContent = "00:00";
 
-  //save the accuracy as high score
   highScoresJson.push(Math.round(accuracy));
+  highScoresJson.sort((a, b) => b - a);
+  highScoresJson.splice(10);
+  localStorage.setItem("highScores", JSON.stringify(highScoresJson));
+  displayHighscore();
 
-  displayHighscore(); //display the high score after this round
-
-  board.innerHTML = `<h1>Game Over</h1><button class="btn" id="play-again">Play Again</button>`;
+  board.innerHTML = `<h1>Game Over</h1><button class="btn" id="play-again">Play Again</button><button class="btn" id="reset-highscore">Reset Score</button>`;
 
   // Add a click event listener to the "Play Again" button
   const playAgainBtn = document.querySelector("#play-again");
 
   playAgainBtn.addEventListener("click", () => {
     resetGame();
+  });
+
+  // Add a click event listener to the "Reset Score" button
+  const resetScoreBtn = document.querySelector("#reset-highscore");
+
+  resetScoreBtn.addEventListener("click", () => {
+    resetScore();
   });
 }
 
@@ -239,7 +265,7 @@ function resetGame() {
   board.innerHTML = "";
   hits = 0;
   missed = 0;
-  accuracy = 100;
+  accuracy = 0;
   hitsEl.textContent = hits;
   accuracyEl.textContent = `${accuracy}%`;
 
@@ -247,10 +273,9 @@ function resetGame() {
   startGame();
 }
 
-//add row of the highscoreTable
 function displayHighscore() {
-  highScoresJson.sort((a, b) => b - a); // Sort scores in descending order
-  highScoresJson.splice(5); //keep only the top 5 scores
+  highScoresJson = JSON.parse(localStorage.getItem("highScores")) || [];
+
   highscoreTableBody.innerHTML = highScoresJson
     .map(
       (score, index) =>
@@ -259,4 +284,10 @@ function displayHighscore() {
         }</th><th scope="col">${score}</th></tr>`
     )
     .join("");
+}
+
+//reset high score
+function resetScore() {
+  localStorage.removeItem("highScores");
+  displayHighscore();
 }
