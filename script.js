@@ -159,7 +159,8 @@ function createRandomCircle() {
   }
 
   const circle = document.createElement("div");
-  const size = getRandomNumber(30, 100);
+  // const size = getRandomNumber(30, 100);
+  const size = 80;
 
   //method available on DOM elements that returns the position and dimensions of the element relative to the viewport
   const { width, height } = board.getBoundingClientRect();
@@ -237,7 +238,7 @@ function gameOver() {
 
   timeEl.textContent = "00:00";
 
-  highScoresJson.push(Math.round(accuracy));
+  highScoresJson.push(hits);
   highScoresJson.sort((a, b) => b - a);
   highScoresJson.splice(10);
   localStorage.setItem("highScores", JSON.stringify(highScoresJson));
