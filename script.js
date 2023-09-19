@@ -98,6 +98,8 @@ const hitsEl = document.querySelector("#hits");
 const accuracyEl = document.querySelector("#accuracy");
 const timeEl = document.querySelector("#time");
 const welcome = document.querySelector("#welcome");
+const highscoreTableBody = document.getElementById("highscoreTableBody"); //get the table body element  to add rows
+const highScoresJson = JSON.parse(localStorage.getItem("highScores")) || []; //save the high score
 
 let timer;
 
@@ -107,6 +109,9 @@ startBtn.addEventListener("click", () => {
 });
 
 function startGame() {
+  //display the high score
+  displayHighscore();
+
   startBtn.style.display = "none"; //hides the start game button
   welcome.style.display = "none";
   // Initialize game variables and start creating random circles
@@ -119,7 +124,7 @@ function startGame() {
   createRandomCircle();
 
   // Set a 30-second timer
-  let remainingTime = 10;
+  let remainingTime = 15;
   updateTimerDisplay(remainingTime);
 
   timer = setInterval(() => {
@@ -149,7 +154,7 @@ function createRandomCircle() {
   }
 
   const circle = document.createElement("div");
-  const size = 100;  // Set a static size for the circles
+  const size = 100; // Set a static size for the circles
 
   const { width, height } = board.getBoundingClientRect();
   const x = getRandomNumber(0, width - size);
@@ -212,7 +217,12 @@ function getRandomNumber(min, max) {
 function gameOver() {
   playing = false;
 
-  timeEl.textContent = "00:00" ;
+  timeEl.textContent = "00:00";
+
+  //save the accuracy as high score
+  highScoresJson.push(Math.round(accuracy));
+
+  displayHighscore(); //display the high score after this round
 
   board.innerHTML = `<h1>Game Over</h1><button class="btn" id="play-again">Play Again</button>`;
 
@@ -235,4 +245,18 @@ function resetGame() {
 
   // Start a new game
   startGame();
+}
+
+//add row of the highscoreTable
+function displayHighscore() {
+  highScoresJson.sort((a, b) => b - a); // Sort scores in descending order
+  highScoresJson.splice(5); //keep only the top 5 scores
+  highscoreTableBody.innerHTML = highScoresJson
+    .map(
+      (score, index) =>
+        `<tr><th scope="col">${
+          index + 1
+        }</th><th scope="col">${score}</th></tr>`
+    )
+    .join("");
 }
