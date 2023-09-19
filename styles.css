@@ -117,3 +117,40 @@
     color: #f0f0f0;
   }
   
+
+  @keyframes ready {
+    0% {
+        width : 80px;
+        height: 80px;
+        top   : -10px;
+        left  : -10px;
+    }
+
+    30% {
+        width : 95px;
+        height: 95px;
+
+    }
+
+    50% {
+        width : 100px;
+        height: 100px;
+        top   : 0px;
+        left  : 0px;
+    }
+
+    70% {
+        width : 95px;
+        height: 95px;
+    }
+
+    100% {
+        width : 80px;
+        height: 80px;
+        top   : -10px;
+        left  : -10px;
+    }
+
+}
+
+/* test */
