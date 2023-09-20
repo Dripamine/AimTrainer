@@ -111,16 +111,31 @@
   border-radius: 50%;
 }
 
-@keyframes circle {
+/* Keyframes animation for shrinking circles for "Advanced" difficulty */
+@keyframes shrink-circle {
   0% {
-    transform: scale(1); /* Keep the circle at a constant size */
+    transform: scale(1);
   }
   100% {
-    transform: scale(1);
+    transform: scale(0);
   }
 }
 
 h1 {
   font-size: 5rem;
   color: #f0f0f0;
+}
+
+.board p {
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.difficulty {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  gap: 10px;
 }

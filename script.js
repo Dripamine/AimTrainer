@@ -100,9 +100,41 @@ const timeEl = document.querySelector("#time");
 const welcome = document.querySelector("#welcome");
 const highscoreTableBody = document.getElementById("highscoreTableBody");
 const resetBtn = document.querySelector("#reset");
+const normalBtn = document.querySelector("#normal");
+const advancedBtn = document.querySelector("#advanced");
 
 displayHighscore();
 let timer;
+let currentDifficulty = 0; // Initialize currentDifficulty to 0
+
+// Add event listeners to difficulty buttons
+document.getElementById("normal").addEventListener("click", () => {
+  toggleButtonState(normalBtn, 1);
+});
+document.getElementById("advanced").addEventListener("click", () => {
+  toggleButtonState(advancedBtn, 2);
+});;
+
+// Function to handle button state
+function toggleButtonState(selectedButton, difficulty) {
+  const buttons = [normalBtn, advancedBtn];
+  const disabled = selectedButton.getAttribute("disabled") === "true";
+
+  if (disabled || difficulty === currentDifficulty) {
+    // If the selected button is already disabled or it's the same difficulty as the current one, enable all buttons and set currentDifficulty to 0.
+    buttons.forEach((button) => {
+      button.removeAttribute("disabled");
+    });
+    currentDifficulty = 0;
+  } else {
+    buttons.forEach((button) => {
+      if (button !== selectedButton) {
+        button.setAttribute("disabled", true);
+      }
+    });
+    currentDifficulty = difficulty;
+  }
+}
 
 // Add a click event listener to the "Start Game" button
 startBtn.addEventListener("click", () => {
@@ -115,6 +147,10 @@ resetBtn.addEventListener("click", () => {
 });
 
 function startGame() {
+  document.getElementById("choose-difficulty").style.display = "none";
+  document.getElementById("normal").style.display = "none";
+  document.getElementById("advanced").style.display = "none";
+
   startBtn.style.display = "none"; //hides the start game button
   welcome.style.display = "none";
   resetBtn.style.display = "none";
@@ -128,7 +164,7 @@ function startGame() {
   createRandomCircle();
 
   // Set a 30-second timer
-  let remainingTime = 15;
+  let remainingTime = 30;
   updateTimerDisplay(remainingTime);
 
   timer = setInterval(() => {
@@ -153,20 +189,27 @@ function updateTimerDisplay(remainingTime) {
 }
 
 function createRandomCircle() {
-  // return when Do nothing
   if (!playing) {
     return;
   }
 
   const circle = document.createElement("div");
-  // const size = getRandomNumber(30, 100);
-  const size = 80;
+  let size, animationDuration;
 
-  //method available on DOM elements that returns the position and dimensions of the element relative to the viewport
+  // Set size and animation duration based on difficulty
+  if (currentDifficulty === 1) {
+    size = 80; // Fixed size for "Normal" difficulty
+    animationDuration = "5s"; // No shrinking effect for "Normal" difficulty
+  } else if (currentDifficulty === 2) {
+    size = getRandomNumber(50, 80); // Random size for "Advanced" difficulty
+    animationDuration = "2s"; // Shrinking effect for "Advanced" difficulty
+    circle.style.animationName = "shrink-circle"; // Apply the shrinking effect
+  }
+
   const { width, height } = board.getBoundingClientRect();
-  //random locations of the circle
   const x = getRandomNumber(0, width - size);
   const y = getRandomNumber(0, height - size);
+
   circle.classList.add("circle");
   circle.style.width = `${size}px`;
   circle.style.height = `${size}px`;
@@ -175,14 +218,15 @@ function createRandomCircle() {
 
   board.append(circle);
 
+  // Set animation duration based on difficulty
+  circle.style.animationDuration = animationDuration;
+
   // Create new circle when the current one disappears
   circle.addEventListener("animationend", () => {
     circle.remove();
     if (playing) {
       createRandomCircle();
-      // If a circle disappears before being clicked, it's counted as a miss
-      addMissed();
-      // Recalculate accuracy
+      missed++;
       calculateAccuracy();
     }
   });
@@ -191,31 +235,24 @@ function createRandomCircle() {
   circle.addEventListener("click", (e) => {
     if (e.target.classList.contains("circle")) {
       if (e.target === circle) {
-        // Increase hits by 1
         hits++;
-        // Remove circle
         e.target.remove();
-        // Create a new circle
         if (playing) {
           createRandomCircle();
         }
         calculateAccuracy();
       }
     } else {
-      // Circle missed when clicked
       missed++;
-      // Recalculate accuracy
       calculateAccuracy();
     }
-    // Show hits on the document
     hitsEl.textContent = hits;
   });
 }
 
-function addMissed() {
-  // Increase missed count by 1
-  missed++;
-}
+
+
+
 
 function calculateAccuracy() {
   if (hits + missed === 0) {
@@ -244,34 +281,16 @@ function gameOver() {
   localStorage.setItem("highScores", JSON.stringify(highScoresJson));
   displayHighscore();
 
-  board.innerHTML = `<h1>Game Over</h1><button class="btn" id="play-again">Play Again</button><button class="btn" id="reset-highscore">Reset Score</button>`;
+  board.innerHTML = `
+  <h1>Game Over</h1>
+  <button class="btn" id="play-again">Play Again</button>`;
 
   // Add a click event listener to the "Play Again" button
   const playAgainBtn = document.querySelector("#play-again");
 
   playAgainBtn.addEventListener("click", () => {
-    resetGame();
+    window.location.reload(); // Reload the page to start a new game
   });
-
-  // Add a click event listener to the "Reset Score" button
-  const resetScoreBtn = document.querySelector("#reset-highscore");
-
-  resetScoreBtn.addEventListener("click", () => {
-    resetScore();
-  });
-}
-
-function resetGame() {
-  // Clear the board and the variable values
-  board.innerHTML = "";
-  hits = 0;
-  missed = 0;
-  accuracy = 0;
-  hitsEl.textContent = hits;
-  accuracyEl.textContent = `${accuracy}%`;
-
-  // Start a new game
-  startGame();
 }
 
 function displayHighscore() {
