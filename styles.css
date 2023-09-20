@@ -43,6 +43,14 @@
   padding: 0.5rem 1rem;
 }
 
+#reset {
+  margin-top: 0.5rem;
+}
+
+#reset-highscore {
+  margin-top: 0.5rem;
+}
+
 .btn:hover {
   color: var(--primary-color);
   background-color: var(--primary-color);
@@ -69,6 +77,20 @@
   color: var(--primary-color);
 }
 
+.timer {
+  border: 5px solid black; /* Border style and color */
+  padding: 8px; /* Padding inside the box */
+  border-radius: 10px; /* Border radius for rounded corners */
+  font-weight: bold;
+  float: center;
+  display: flex;
+  justify-content: center;
+}
+
+.info2 {
+  justify-content: right; /* Float info2 to the right */
+}
+
 .board {
   display: flex;
   align-items: center;
@@ -90,6 +112,9 @@
 }
 
 @keyframes circle {
+  0% {
+    transform: scale(1); /* Keep the circle at a constant size */
+  }
   100% {
     transform: scale(0);
   }
@@ -98,4 +123,18 @@
 h1 {
   font-size: 5rem;
   color: #f0f0f0;
+}
+
+.board p {
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.difficulty {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  gap: 10px;
 }

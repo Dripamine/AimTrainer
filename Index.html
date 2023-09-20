@@ -32,7 +32,7 @@
                                     <th scope="col">Score</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="highscoreTableBody">
                                 <!-- Highscore rows will be inserted here -->
                             </tbody>
                         </table>
@@ -44,14 +44,24 @@
                 <div class="screen">
                     <div class="stats">
                         <div class="info">
-                            <p>Time: <span id="time">00:00</span></p>
-                            <p>Target Hits: <span id="hits">0</span></p>
-                            <p>Accuracy: <span id="accuracy">100%</span></p>
+                            <p class="timer">Time: <span id="time">00:00</span></p>
+                            
+                                <p>Target Hits: <span id="hits">0</span></p>
+                                <p>Accuracy: <span id="accuracy">0%</span></p>
+                            
                         </div>
                     </div>
                     <div class="board" id="board">
                         <h1 id="welcome">Aim Trainer</h1>
+                        <p id = 'choose-difficulty'>Choose Difficulty:</p>
+                        <div class = 'difficulty'>
+                            <button class="btn" id="easy">Easy</button>
+                            <button class="btn" id="medium">Medium</button>
+                            <button class="btn" id="hard">Hard</button>
+                            <button class="btn" id="expert">Expert</button>
+                        </div>
                         <button class="btn" id="start">Start Game</button>
+                        <button class="btn" id="reset">Reset Score</button>
                     </div>
                 </div>
             </div>
