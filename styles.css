@@ -3,11 +3,14 @@
 }
 
 .ribbon-container {
-  background-color: #fffec3; /* Background color for the ribbon */
+  background-color: #fffec3;
+  /* Background color for the ribbon */
   padding: 15px;
-  border-radius: 0 10px 10px 0; /* Rounded edges for the ribbon */
+  border-radius: 0 10px 10px 0;
+  /* Rounded edges for the ribbon */
   height: 100%;
-  margin-bottom: 20px; /* Spacing between the ribbon and the game grid */
+  margin-bottom: 20px;
+  /* Spacing between the ribbon and the game grid */
 }
 
 .instructions {
@@ -26,10 +29,14 @@
 }
 
 .game-grid {
-  display: grid; /* Use CSS Grid to create a grid layout */
-  grid-template-columns: repeat(5, 1fr); /* Define 5 equal-width columns */
-  justify-items: center; /* Center the items in the grid along the column axis */
-  gap: 50px; /* Set a gap of 50px between grid items */
+  display: grid;
+  /* Use CSS Grid to create a grid layout */
+  grid-template-columns: repeat(5, 1fr);
+  /* Define 5 equal-width columns */
+  justify-items: center;
+  /* Center the items in the grid along the column axis */
+  gap: 50px;
+  /* Set a gap of 50px between grid items */
 }
 
 /************************************************************************************/
@@ -78,9 +85,12 @@
 }
 
 .timer {
-  border: 5px solid black; /* Border style and color */
-  padding: 8px; /* Padding inside the box */
-  border-radius: 10px; /* Border radius for rounded corners */
+  border: 5px solid black;
+  /* Border style and color */
+  padding: 8px;
+  /* Padding inside the box */
+  border-radius: 10px;
+  /* Border radius for rounded corners */
   font-weight: bold;
   float: center;
   display: flex;
@@ -88,7 +98,8 @@
 }
 
 .info2 {
-  justify-content: right; /* Float info2 to the right */
+  justify-content: right;
+  /* Float info2 to the right */
 }
 
 .board {
@@ -116,6 +127,7 @@
   0% {
     transform: scale(1);
   }
+
   100% {
     transform: scale(0);
   }

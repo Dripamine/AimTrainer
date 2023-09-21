@@ -250,10 +250,6 @@ function createRandomCircle() {
   });
 }
 
-
-
-
-
 function calculateAccuracy() {
   if (hits + missed === 0) {
     accuracy = 0; // Prevent division by zero
@@ -299,8 +295,7 @@ function displayHighscore() {
   highscoreTableBody.innerHTML = highScoresJson
     .map(
       (score, index) =>
-        `<tr><th scope="col">${
-          index + 1
+        `<tr><th scope="col">${index + 1
         }</th><th scope="col">${score}</th></tr>`
     )
     .join("");
