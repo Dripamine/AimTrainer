@@ -86,12 +86,14 @@
 // // generateGameGrid();
 
 // /* ******************************************************************************************* */
+// Initialize various variables of the game
 let playing = false;
 let hits = 0;
 let missed = 0;
 let accuracy = 0;
 let time = 0;
 
+//Reference to various HTML elements of the game
 const startBtn = document.querySelector("#start");
 const board = document.querySelector("#board");
 const hitsEl = document.querySelector("#hits");
@@ -113,9 +115,9 @@ document.getElementById("normal").addEventListener("click", () => {
 });
 document.getElementById("advanced").addEventListener("click", () => {
   toggleButtonState(advancedBtn, 2);
-});;
+});
 
-// Function to handle button state
+// Manage the state (enabled or disabled) of a group of buttons representing different difficulty levels
 function toggleButtonState(selectedButton, difficulty) {
   const buttons = [normalBtn, advancedBtn];
   const disabled = selectedButton.getAttribute("disabled") === "true";
@@ -146,6 +148,7 @@ resetBtn.addEventListener("click", () => {
   resetScore();
 });
 
+// Initiate the start of the game
 function startGame() {
   document.getElementById("choose-difficulty").style.display = "none";
   document.getElementById("normal").style.display = "none";
@@ -178,16 +181,21 @@ function startGame() {
   }, 1000);
 }
 
+//Displays the remaining time of the timer
 function updateTimerDisplay(remainingTime) {
-  const minutes = Math.floor(remainingTime / 60);
-  const seconds = remainingTime % 60;
-  //converts the minutes and seconds into a string.
+  const minutes = Math.floor(remainingTime / 60); // Calculates the number of minutes
+  const seconds = remainingTime % 60; //Gives you the seconds portion of the remaining time.
+  //converts the minutes and seconds into a string with leading zeros if necessary to ensure they have two digits.
   const formattedTime = `${minutes.toString().padStart(2, "0")}:${seconds
     .toString()
     .padStart(2, "0")}`;
   timeEl.textContent = formattedTime;
 }
 
+/*
+ * Generating circles with random sizes and positions, applying animations based on the game's difficulty level,
+ * and handling interactions (hits and misses)
+ */
 function createRandomCircle() {
   if (!playing) {
     return;
@@ -206,10 +214,11 @@ function createRandomCircle() {
     circle.style.animationName = "shrink-circle"; // Apply the shrinking effect
   }
 
+  // Method available on DOM elements that returns the position and dimensions of the element relative to the viewport
   const { width, height } = board.getBoundingClientRect();
   const x = getRandomNumber(0, width - size);
   const y = getRandomNumber(0, height - size);
-
+  // Random locations of the circle
   circle.classList.add("circle");
   circle.style.width = `${size}px`;
   circle.style.height = `${size}px`;
@@ -250,10 +259,7 @@ function createRandomCircle() {
   });
 }
 
-
-
-
-
+// Calculates the accuracy based on the number of hits and misses
 function calculateAccuracy() {
   if (hits + missed === 0) {
     accuracy = 0; // Prevent division by zero
@@ -293,6 +299,7 @@ function gameOver() {
   });
 }
 
+//  Retrieves high scores from localStorage, parses the data, and then generates an HTML table of high scores
 function displayHighscore() {
   highScoresJson = JSON.parse(localStorage.getItem("highScores")) || [];
 
@@ -306,7 +313,7 @@ function displayHighscore() {
     .join("");
 }
 
-//reset high score
+// Reset high score
 function resetScore() {
   localStorage.removeItem("highScores");
   displayHighscore();
