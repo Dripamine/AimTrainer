@@ -39,6 +39,18 @@
   /* Set a gap of 50px between grid items */
 }
 
+/* Add this to your styles.css file */
+
+.footer {
+  text-align: center;
+  padding-top: 10px;
+  background-color: #f0f0f0; /* Adjust the background color as needed */
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+
 /************************************************************************************/
 
 .btn {
@@ -151,3 +163,4 @@ h1 {
   margin-bottom: 1rem;
   gap: 10px;
 }
+
