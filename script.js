@@ -192,10 +192,8 @@ function updateTimerDisplay(remainingTime) {
   timeEl.textContent = formattedTime;
 }
 
-/*
- * Generating circles with random sizes and positions, applying animations based on the game's difficulty level,
- * and handling interactions (hits and misses)
- */
+// Generating circles with random sizes and positions, applying animations based on the game's difficulty level,
+// and handling interactions (hits and misses)
 function createRandomCircle() {
   if (!playing) {
     return;
